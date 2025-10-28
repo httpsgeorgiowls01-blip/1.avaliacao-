@@ -1,0 +1,71 @@
+# 1.avaliacao-
+import java.util.Scanner;
+
+public class SistemaEscolar {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        double[] notas = new double[8];
+
+        System.out.println("Digite as 8 notas anuais do aluno (use '.' ou ',' como separador decimal):");
+
+        for (int i = 0; i < 8; i++) {
+            while (true) {
+                System.out.printf("Nota %d: ", i + 1);
+                String line = input.nextLine().trim();
+                if (line.isEmpty()) {
+                    System.out.println("Entrada vazia. Digite uma nota válida entre 0 e 10.");
+                    continue;
+                }
+
+                // Accept both comma and dot as decimal separator
+                line = line.replace(',', '.');
+
+                try {
+                    double valor = Double.parseDouble(line);
+                    if (valor < 0.0 || valor > 10.0) {
+                        System.out.println("Nota inválida. Informe um valor entre 0 e 10.");
+                        continue;
+                    }
+                    notas[i] = valor;
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Formato inválido. Digite um número (ex: 7.5 ou 7,5).");
+                }
+            }
+        }
+
+        // Calcular médias semestrais usando loops (mais fácil de manter)
+        double somaPrimeiroSemestre = 0.0;
+        double somaSegundoSemestre = 0.0;
+        for (int i = 0; i < 4; i++) {
+            somaPrimeiroSemestre += notas[i];
+        }
+        for (int i = 4; i < 8; i++) {
+            somaSegundoSemestre += notas[i];
+        }
+
+        double primeiroSemestre = somaPrimeiroSemestre / 4.0;
+        double segundoSemestre = somaSegundoSemestre / 4.0;
+        double mediaFinal = (primeiroSemestre + segundoSemestre) / 2.0;
+
+        // Apresentar resultados
+        System.out.println("\nResultados:");
+        for (int i = 0; i < 8; i++) {
+            System.out.printf("%dº Bimestre: %.1f%n", i + 1, notas[i]);
+        }
+
+        System.out.printf("1º Semestre: %.1f%n", primeiroSemestre);
+        System.out.printf("2º Semestre: %.1f%n", segundoSemestre);
+        System.out.printf("Média Final: %.1f%n", mediaFinal);
+
+        // Situação final (configurável)
+        double notaAprovacao = 6.0;
+        if (mediaFinal >= notaAprovacao) {
+            System.out.println("Situação: Aprovado");
+        } else {
+            System.out.println("Situação: Reprovado");
+        }
+
+        input.close();
+    }
+}
